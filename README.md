@@ -1,6 +1,6 @@
 LIGHT SHOW FILES
 ================
-test push -Jami
+
 ## Description
 
 A repository for any programs/scripts used for the September 19th Light Show.
