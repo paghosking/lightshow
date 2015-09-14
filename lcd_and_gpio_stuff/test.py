@@ -2,7 +2,7 @@
 # test script for GPIO and LCD 16x2 control
 
 import sys
-sys.path.insert(0, '/home/pi/lcd_screen_test/')
+sys.path.insert(0, '/home/pi/lcd_screen_test/lightshow/lcd_and_gpio_stuff/')
 
 import lib_lcd
 

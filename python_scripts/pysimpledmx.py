@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import serial, sys
 
 START_VAL   = 0x7E
@@ -40,7 +41,7 @@ class DMXConnection(object):
 
   def setChannel(self, chan, val, autorender = False):
     '''
-    Takes channel and value arguments to set a channel level in the local 
+    Takes channel and value arguments to set a channel level in the local
     DMX frame, to be rendered the next time the render() method is called.
     '''
     if not 1 <= chan <= DMX_SIZE:
@@ -74,9 +75,9 @@ class DMXConnection(object):
     ]
     packet += self.dmx_frame
     packet.append(END_VAL)
-    
+
     packet = map(chr, packet)
-    self.com.write(''.join(packet)) 
+    self.com.write(''.join(packet))
 
   def close(self):
     self.com.close()

@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import chroma
 
 # class for handling color mixing and output
