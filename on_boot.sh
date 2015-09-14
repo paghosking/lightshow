@@ -22,6 +22,9 @@ sh /home/pi/lightshow/start_fluid.sh &
 # wait for fluid synth to start up. This is necessary ensure the fluidsynth audio port has been created.
 sleep 15
 
+# set PCM volume to max
+amixer -c 0 set PCM playback 100% unmute
+
 # route keyboard midi input to fluidsynth
 aconnect 20:0 128:0
 
