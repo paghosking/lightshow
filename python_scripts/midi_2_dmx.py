@@ -34,6 +34,8 @@ current_mode = 0
 def changeMode(void):
     global current_mode
     current_mode += 1
+    global color
+    color.change_mode(current_mode)
     text = "Mode: %d" % current_mode
     lcdPrint(text, 1)
     lcdPrint("", 2)
