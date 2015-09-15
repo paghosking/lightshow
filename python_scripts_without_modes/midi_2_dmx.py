@@ -1,52 +1,13 @@
 #!/usr/bin/python
 # Python midi to color script
 import sys
-sys.path.insert(0, '/home/pi/lightshow/python_scripts/')
 
 import pygame
 import pygame.midi
 
 import pysimpledmx
 
-import RPi.GPIO as GPIO
-import time
-
 import lib
-import lib_lcd
-
-# set up GPIO pins
-GPIO.setmode(GPIO.BCM)       # Use BCM GPIO numbers
-GPIO.setup(lib_lcd.LCD_E, GPIO.OUT)  # E
-GPIO.setup(lib_lcd.LCD_RS, GPIO.OUT) # RS
-GPIO.setup(lib_lcd.LCD_D4, GPIO.OUT) # DB4
-GPIO.setup(lib_lcd.LCD_D5, GPIO.OUT) # DB5
-GPIO.setup(lib_lcd.LCD_D6, GPIO.OUT) # DB6
-GPIO.setup(lib_lcd.LCD_D7, GPIO.OUT) # DB7
-# push button
-GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-
-
-# Initialise display
-lib_lcd.lcd_init()
-
-current_mode = 0
-# define a callback function for button GPIO pin
-def changeMode(void):
-    global current_mode
-    current_mode += 1
-    text = "Mode: %d" % current_mode
-    lcdPrint(text, 1)
-    lcdPrint("", 2)
-    if current_mode > 4:
-        current_mode = 0
-
-# a more convenient function for printing text to LCD
-def lcdPrint(text, line):
-    if line==1:
-        lib_lcd.lcd_string(text,lib_lcd.LCD_LINE_1)
-    else:
-        lib_lcd.lcd_string(text,lib_lcd.LCD_LINE_2)
-
 
 # mydmx = pysimpledmx.DMXConnection('/dev/cu.usbserial-6AYP9O1D') # mac dmx com port
 # mydmx = pysimpledmx.DMXConnection(5)  # windows dmx com port
@@ -65,8 +26,6 @@ VEL_MAX = 127
 clock = pygame.time.Clock()
 FRAMES_PER_SECOND = 60
 
-# create an instance of the color handling class
-color = lib.MidiColor(no_of_colors)
 
 def clamp(n, minn, maxn):
     return max(min(maxn, n), minn)
@@ -80,14 +39,6 @@ def render_color(color):
     mydmx.render()  # render all of the above changes onto the DMX network
 
 def main():
-
-    # need access to the color class instance
-    global color
-
-    GPIO.add_event_detect(17, GPIO.RISING, callback=changeMode, bouncetime=300)
-
-    lcdPrint("LightHub", 1)
-    lcdPrint("Initialized", 2)
 
     pygame.init()
 # screen = pygame.display.set_mode((screen_width, screen_height), pygame.RESIZABLE, 32)
@@ -104,8 +55,9 @@ def main():
 # if no light output is observed, try changing the midi_in port. Use aconnect -i shell command to list midi ports
     midi_in = pygame.midi.Input(2)
 
-    # turn off DMX light initially
-    render_color(color.output_color.rgb)
+# init MidiColor class
+    color = lib.MidiColor(no_of_colors)
+    render_color(color.output_color.rgb)  # turn light off initially
 
     while True:
 
@@ -138,15 +90,13 @@ def main():
 
 if __name__ == '__main__':
 
-    try:
-        main()
-    except KeyboardInterrupt:
-        print "\n\nprogram terminated\n"
-    finally:
-        mydmx.close()
-        lib_lcd.lcd_byte(0x01, lib_lcd.LCD_CMD)
-        lib_lcd.lcd_string("Goodbye!",lib_lcd.LCD_LINE_1)
-        GPIO.cleanup()
+  try:
+      main()
+  except KeyboardInterrupt:
+      print "\n\nprogram terminated\n"
+      pass
+  finally:
+      mydmx.close()
 
 
 
