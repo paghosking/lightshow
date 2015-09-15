@@ -7,19 +7,8 @@ class MidiColor:
         self.output_color = chroma.Color('#000000')
         self.no_of_colors = 12
         self.lookup_table = {}
-        self.lookup_table[0] = chroma.Color('#28ff00')  # C
-        self.lookup_table[1] = chroma.Color('#00ffe8')  # C#
-        self.lookup_table[2] = chroma.Color('#007cff')  # D
-        self.lookup_table[3] = chroma.Color('#0500ff')  # D#
-        self.lookup_table[4] = chroma.Color('#4500ea')  # E
-        self.lookup_table[5] = chroma.Color('#57009e')  # F
-        self.lookup_table[6] = chroma.Color('#740000')  # F#
-        self.lookup_table[7] = chroma.Color('#b30000')  # G
-        self.lookup_table[8] = chroma.Color('#ee0000')  # G#
-        self.lookup_table[9] = chroma.Color('#ff6300')  # A
-        self.lookup_table[10] = chroma.Color('#ffec00')  # A#
-        self.lookup_table[11] = chroma.Color('#99ff00')  # B
-
+        for i in range(0,self.no_of_colors):
+            self.lookup_table[i] = chroma.Color('#000000')
         self.color_counts = {}
         for j in range(0, self.no_of_colors):
             self.color_counts[j] = [0, 0]
@@ -27,7 +16,6 @@ class MidiColor:
     # define the different color palette modes
     def change_mode(self, mode):
         self.output_color = chroma.Color('#000000')
-        self.lookup_table = {}
         if mode == 1:
             self.no_of_colors = 12
             self.lookup_table[0] = chroma.Color('#ffffff')  # C
