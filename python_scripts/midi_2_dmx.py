@@ -38,9 +38,13 @@ def changeMode(void):
     color.change_mode(current_mode)
     text = "Mode: %d" % current_mode
     lcdPrint(text, 1)
-    lcdPrint("", 2)
-    if current_mode > 4:
+    if current_mode == 1:
+        lcdPrint("Color Scores", 2)
+    elif current_mode == 2:
+        lcdPrint("", 2)
+    elif current_mode > 4:
         current_mode = 0
+        lcdPrint("", 2)
 
 # a more convenient function for printing text to LCD
 def lcdPrint(text, line):
