@@ -19,60 +19,38 @@ class MidiColor:
         if mode == 1: # mode for color scores
             self.no_of_colors = 12
             self.lookup_table[0] = chroma.Color('#ff0000')  # C RED
-            self.lookup_table[1] = chroma.Color('#000000')  # C#
+            self.lookup_table[1] = chroma.Color('#000000')  # C# OFF
             self.lookup_table[2] = chroma.Color('#ff4400')  # D ORANGE
-            self.lookup_table[3] = chroma.Color('#000000')  # D#
+            self.lookup_table[3] = chroma.Color('#000000')  # D# OFF
             self.lookup_table[4] = chroma.Color('#ff8800')  # E YELLOW
             self.lookup_table[5] = chroma.Color('#00ff00')  # F GREEN
-            self.lookup_table[6] = chroma.Color('#000000')  # F#
+            self.lookup_table[6] = chroma.Color('#000000')  # F# OFF
             self.lookup_table[7] = chroma.Color('#00ffcc')  # G TEAL
-            self.lookup_table[8] = chroma.Color('#000000')  # G#
+            self.lookup_table[8] = chroma.Color('#000000')  # G# OFF
             self.lookup_table[9] = chroma.Color('#0000ff')  # A BLUE
-            self.lookup_table[10] = chroma.Color('#000000')  # A#
+            self.lookup_table[10] = chroma.Color('#000000')  # A# OFF
             self.lookup_table[11] = chroma.Color('#ff00cc')  # B PURPLE
-        elif mode == 2:
+        elif mode == 2: # Rainbow
             self.no_of_colors = 12
-            self.lookup_table[0] = chroma.Color('#ff0000')  # C
-            self.lookup_table[1] = chroma.Color('#ff0000')  # C#
-            self.lookup_table[2] = chroma.Color('#ff0000')  # D
-            self.lookup_table[3] = chroma.Color('#ff0000')  # D#
-            self.lookup_table[4] = chroma.Color('#ff0000')  # E
-            self.lookup_table[5] = chroma.Color('#ff0000')  # F
-            self.lookup_table[6] = chroma.Color('#ff0000')  # F#
-            self.lookup_table[7] = chroma.Color('#ff0000')  # G
-            self.lookup_table[8] = chroma.Color('#ff0000')  # G#
-            self.lookup_table[9] = chroma.Color('#ff0000')  # A
-            self.lookup_table[10] = chroma.Color('#ff0000')  # A#
-            self.lookup_table[11] = chroma.Color('#ff0000')  # B
-        elif mode == 3:
+            for i in range(0,12):
+                hue = int(i*340/12)
+                self.lookup_table[i] = chroma.Color((hue, 1, 1), 'HSV')
+        elif mode == 3: # Reds
             self.no_of_colors = 12
-            self.lookup_table[0] = chroma.Color('#000000')  # C
-            self.lookup_table[1] = chroma.Color('#00ff00')  # C#
-            self.lookup_table[2] = chroma.Color('#00ff00')  # D
-            self.lookup_table[3] = chroma.Color('#00ff00')  # D#
-            self.lookup_table[4] = chroma.Color('#00ff00')  # E
-            self.lookup_table[5] = chroma.Color('#00ff00')  # F
-            self.lookup_table[6] = chroma.Color('#00ff00')  # F#
-            self.lookup_table[7] = chroma.Color('#00ff00')  # G
-            self.lookup_table[8] = chroma.Color('#00ff00')  # G#
-            self.lookup_table[9] = chroma.Color('#00ff00')  # A
-            self.lookup_table[10] = chroma.Color('#00ff00')  # A#
-            self.lookup_table[11] = chroma.Color('#00ff00')  # B
-        elif mode == 4:
+            for i in range(0,12):
+                hue = int(i*50/12)
+                self.lookup_table[i] = chroma.Color((hue, 1, 1), 'HSV')
+        elif mode == 4: # Greens
             self.no_of_colors = 12
-            self.lookup_table[0] = chroma.Color('#0000ff')  # C
-            self.lookup_table[1] = chroma.Color('#0000ff')  # C#
-            self.lookup_table[2] = chroma.Color('#0000ff')  # D
-            self.lookup_table[3] = chroma.Color('#0000ff')  # D#
-            self.lookup_table[4] = chroma.Color('#0000ff')  # E
-            self.lookup_table[5] = chroma.Color('#0000ff')  # F
-            self.lookup_table[6] = chroma.Color('#0000ff')  # F#
-            self.lookup_table[7] = chroma.Color('#0000ff')  # G
-            self.lookup_table[8] = chroma.Color('#0000ff')  # G#
-            self.lookup_table[9] = chroma.Color('#0000ff')  # A
-            self.lookup_table[10] = chroma.Color('#0000ff')  # A#
-            self.lookup_table[11] = chroma.Color('#0000ff')  # B
-        else:
+            for i in range(0,12):
+                hue = int(i*100/12)+60
+                self.lookup_table[i] = chroma.Color((hue, 1, 1), 'HSV')
+        elif mode == 5: # Blues
+            self.no_of_colors = 12
+            for i in range(0,12):
+                hue = int(i*100/12)+180
+                self.lookup_table[i] = chroma.Color((hue, 1, 1), 'HSV')
+        else: # resonating colors
             self.no_of_colors = 12
             self.lookup_table[0] = chroma.Color('#28ff00')  # C
             self.lookup_table[1] = chroma.Color('#00ffe8')  # C#
