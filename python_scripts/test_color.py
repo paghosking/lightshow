@@ -17,7 +17,7 @@ mydmx = pysimpledmx.DMXConnection('/dev/ttyUSB0')  # linux com port
 
 color = chroma.Color('#000000')
 render_color(color.rgb)
-color = chroma.Color('#00ffcc')
+color = chroma.Color('#000000')
 render_color(color.rgb)
 print color.rgb
 # time.sleep(2)

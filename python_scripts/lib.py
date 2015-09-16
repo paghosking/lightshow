@@ -93,8 +93,11 @@ class MidiColor:
 
 
     def add_color(self, color_ref, vel, max_vel):
-        vel /= float(2 * max_vel)
-        vel = self._clamp(vel, 0, 0.5)
+        if self.lookup_table[color_ref] == chroma.Color('#000000'):
+            vel = 0
+        else:
+            vel /= float(2 * max_vel)
+            vel = self._clamp(vel, 0, 0.5)
         self.color_counts[color_ref][0] += 1
         self.color_counts[color_ref] = [self.color_counts[color_ref][0], vel]
         self.color_counts[color_ref][0] = self._clamp(self.color_counts[color_ref][0], 0, 1)
