@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import chroma
 
-# class for handling color mixing and output
+# class for handling color mixing for PERFORMANCE INSTRUMENTS
 class MidiColor:
     def __init__(self, no_of_colors):
         self.output_color = chroma.Color('#000000')

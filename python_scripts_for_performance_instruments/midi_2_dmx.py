@@ -56,9 +56,9 @@ def main():
     # initiate midi input
     pygame.midi.init()
 
-    midi_in = pygame.midi.Input(pygame.midi.get_default_input_id())
+    # midi_in = pygame.midi.Input(pygame.midi.get_default_input_id())
     # if no light output is observed, try changing the midi_in port. Use aconnect -i shell command to list midi ports
-    #     midi_in = pygame.midi.Input(2)
+    midi_in = pygame.midi.Input(3)
 
     # turn off DMX light initially
     # render_color(color.output_color.rgb)
@@ -76,8 +76,8 @@ def main():
 
         while midi_in.poll():
             midi_event = midi_in.read(1)
-            if midi_event[0][0][0] != 248:
-                print midi_event
+            # if midi_event[0][0][0] != 248:
+            print midi_event
             if midi_event[0][0][0] == 144:
                 key_id = midi_event[0][0][1]
                 note = key_id % no_of_colors
