@@ -36,10 +36,11 @@ def instrument(instrument, midi_port):
         while stopQ.empty():
             while midi_in.poll():
                 midi_event = midi_in.read(1)
-                # logging.debug(midi_event)
+                if midi_event[0][0][0] != 248:
+                    logging.debug(midi_event)
                 if midi_event[0][0][0] in valid_key_types:
                     key_id = midi_event[0][0][1]
-                    if midi_event[0][0][2]:
+                    if midi_event[0][0][0] == 144:
                         vel = midi_event[0][0][2]
                         keyboardQ.put([key_id, vel])
                     else:
@@ -87,11 +88,11 @@ def dmx():
     keyboard_color = lib.MidiColor(12)
     keyboard_color.change_mode(5)
     drums_color = lib.MidiColor(12)
-    drums_color.change_mode(5)
+    drums_color.change_mode(1)
 
     # some dmx channels need to be set at a constant value
-    mydmx.setChannel(1, 255)
-    mydmx.setChannel(24, 255)
+    # mydmx.setChannel(1, 255)
+    # mydmx.setChannel(24, 255)
 
     while True:
         fps = clock.tick(60) # frame limit
@@ -107,7 +108,7 @@ def dmx():
             if not drumsQ.empty():
                 midi_data = drumsQ.get()
                 print midi_data
-                midi_data[0] %= 12
+                # midi_data[0] %= 12
                 if midi_data[1]:
                     drums_color.add_color(midi_data[0], midi_data[1], VEL_MAX)
                 else:
@@ -116,8 +117,11 @@ def dmx():
         keyboard_color.update()
         drums_color.update()
         # set dmx channels
-        render_color(keyboard_color.output_color.rgb, 2)
-        render_color(drums_color.output_color.rgb, 20)
+        render_color(keyboard_color.output_color.rgb, 16)
+        render_color(keyboard_color.output_color.rgb, 22)
+        render_color(keyboard_color.output_color.rgb, 4)
+        render_color(keyboard_color.output_color.rgb, 10)
+        render_color(drums_color.output_color.rgb, 28)
         # render all dmx channels
         mydmx.render()
 
@@ -135,9 +139,9 @@ pygame.midi.init()
 # set up queues
 stopQ = Queue.Queue()
 keyboardQ = Queue.Queue()
-drumsQ  = Queue.Queue()
+drumsQ = Queue.Queue()
 
-keyboard_thread = threading.Thread(name='keybaord', target=instrument, args=('keyboard', 1))
+keyboard_thread = threading.Thread(name='keyboard', target=instrument, args=('keyboard', 1))
 drums_thread = threading.Thread(name='drums', target=instrument, args=('drums', 2))
 
 keyboard_thread.start()
