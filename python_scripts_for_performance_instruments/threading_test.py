@@ -61,17 +61,45 @@ def instrument(instrument, midi_port):
     midi_in.close()
     logging.debug(instrument + ' thread stopped')
 
+
+def render_color(color, channel):
+    mydmx.setChannel(1, 255)
+    mydmx.setChannel(channel, int(color[0] * 255))
+    mydmx.setChannel(channel + 1, int(color[1] * 255))
+    mydmx.setChannel(channel + 2, int(color[2] * 255))
+
 def dmx():
+
+    global mydmx
+
+    # set up frame limit
+    clock = pygame.time.Clock()
+
     # initialize color class instances
     keyboard_color = lib.MidiColor(12)
+    keyboard_color.change_mode(5)
 
     while True:
+        fps = clock.tick(60) # frame limit
         while not (keyboardQ.empty() and drumsQ.empty()):
             if not keyboardQ.empty():
-                print keyboardQ.get()
+                midi_data =  keyboardQ.get()
+                midi_data[0] %= 12
+                if midi_data[1]:
+                    keyboard_color.add_color(midi_data[0], midi_data[1], VEL_MAX)
+                else:
+                    keyboard_color.rem_color(midi_data[0])
             if not drumsQ.empty():
                 print drumsQ.get()
+        keyboard_color.update()
+        # print keyboard_color.output_color
+        render_color(keyboard_color.output_color.rgb, 2)
+        mydmx.render()
 
+
+# mydmx = pysimpledmx.DMXConnection('/dev/cu.usbserial-6AYP9O1D') # mac dmx com port
+# mydmx = pysimpledmx.DMXConnection(5)  # windows dmx com port
+mydmx = pysimpledmx.DMXConnection('/dev/ttyUSB0')  # linux com port
 
 # pygame midi initialization
 pygame.init()
@@ -98,4 +126,5 @@ finally:
     stopQ.put('stop')
     keyboard_thread.join()
     drums_thread.join()
+    mydmx.close()
     print "TERMINATED"
