@@ -87,6 +87,10 @@ def dmx():
     # initialize color class instances
     keyboard_color = lib.MidiColor(12)
     keyboard_color.change_mode(5)
+
+    keyboard_color_1 = lib.MidiColor(12)
+    keyboard_color_1.change_mode(5)
+
     drums_color = lib.MidiColor(12)
     drums_color.change_mode(1)
 
@@ -100,11 +104,20 @@ def dmx():
             if not keyboardQ.empty():
                 midi_data = keyboardQ.get()
                 print midi_data
-                midi_data[0] %= 12
-                if midi_data[1]:
-                    keyboard_color.add_color(midi_data[0], midi_data[1], VEL_MAX)
+                if midi_data[0] > 59:
+                    midi_data[0] %= 12
+                    if midi_data[1]:
+                        keyboard_color.add_color(midi_data[0], midi_data[1], VEL_MAX)
+                    else:
+                        keyboard_color.rem_color(midi_data[0])
                 else:
-                    keyboard_color.rem_color(midi_data[0])
+                    midi_data[0] %= 12
+                    midi_data[0] %= 12
+                    if midi_data[1]:
+                        keyboard_color_1.add_color(midi_data[0], midi_data[1], VEL_MAX)
+                    else:
+                        keyboard_color_1.rem_color(midi_data[0])
+
             if not drumsQ.empty():
                 midi_data = drumsQ.get()
                 print midi_data
@@ -115,12 +128,19 @@ def dmx():
                     drums_color.rem_color(midi_data[0])
         # update color classes
         keyboard_color.update()
+        keyboard_color_1.update()
         drums_color.update()
         # set dmx channels
         render_color(keyboard_color.output_color.rgb, 16)
         render_color(keyboard_color.output_color.rgb, 22)
         render_color(keyboard_color.output_color.rgb, 4)
         render_color(keyboard_color.output_color.rgb, 10)
+
+        render_color(keyboard_color_1.output_color.rgb, 19)
+        render_color(keyboard_color_1.output_color.rgb, 25)
+        render_color(keyboard_color_1.output_color.rgb, 7)
+        render_color(keyboard_color_1.output_color.rgb, 13)
+
         render_color(drums_color.output_color.rgb, 28)
         # render all dmx channels
         mydmx.render()
