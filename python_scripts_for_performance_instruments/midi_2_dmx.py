@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Python midi to color script
+# Python midi to color script for PERFORMANCE INSTRUMENTS
 import sys
 
 import pygame
@@ -8,100 +8,150 @@ import pygame.midi
 import pysimpledmx
 
 import lib
+import threading
+import Queue
+import logging
+import time
 
-# mydmx = pysimpledmx.DMXConnection('/dev/cu.usbserial-6AYP9O1D') # mac dmx com port
-# mydmx = pysimpledmx.DMXConnection(5)  # windows dmx com port
-# mydmx = pysimpledmx.DMXConnection('/dev/ttyUSB0')  # linux com port
+import chroma
 
 # settings
-screen_height = 200
-screen_width = 200
-no_of_colors = 12
-top_key = 84
-bottom_key = 36
-key_range = top_key - bottom_key
 VEL_MAX = 127
 
-# timing
-clock = pygame.time.Clock()
-FRAMES_PER_SECOND = 60
+# config for logging (prints for debugging threads)
+logging.basicConfig(level=logging.DEBUG,
+                    format='[%(levelname)s] (%(threadName)-10s) %(message)s',
+                    )
 
-# create an instance of the color handling class
-color = lib.MidiColor(no_of_colors)
+def instrument(instrument, midi_port):
+    logging.debug('starting instrument thread for ' + instrument)
+    # open midi port
+    midi_in = pygame.midi.Input(midi_port)
 
-def clamp(n, minn, maxn):
-    return max(min(maxn, n), minn)
+    if instrument == 'keyboard':
+
+        # only valid key types and key ids
+        valid_key_types = [144, 128]
+
+        while stopQ.empty():
+            while midi_in.poll():
+                midi_event = midi_in.read(1)
+                # logging.debug(midi_event)
+                if midi_event[0][0][0] in valid_key_types:
+                    key_id = midi_event[0][0][1]
+                    if midi_event[0][0][2]:
+                        vel = midi_event[0][0][2]
+                        keyboardQ.put([key_id, vel])
+                    else:
+                        keyboardQ.put([key_id, 0])
 
 
-# def render_color(color):
-#     mydmx.setChannel(1, 255)  # set DMX channel 1 to full
-#     mydmx.setChannel(2, int(color[0] * 255))
-#     mydmx.setChannel(3, int(color[1] * 255))
-#     mydmx.setChannel(4, int(color[2] * 255))
-#     mydmx.render()  # render all of the above changes onto the DMX network
+    elif instrument == 'drums':
 
-def main():
+        # only valid key types an key ids
+        valid_key_ids = [31, 46, 85, 47, 43, 33, 49, 51, 48, 42]
 
-    # need access to the color class instance
-    global color
+        while stopQ.empty():
+            while midi_in.poll():
+                midi_event = midi_in.read(1)
+                # logging.debug(midi_event)
+                if midi_event[0][0][1] in valid_key_ids:
+                    key_id = midi_event[0][0][1]
+                    if midi_event[0][0][2]:
+                        vel = midi_event[0][0][2]
+                        drumsQ.put([key_id, vel])
+                    else:
+                        drumsQ.put([key_id, 0])
 
-    pygame.init()
-    # screen = pygame.display.set_mode((screen_width, screen_height), pygame.RESIZABLE, 32)
-    # pygame.display.set_caption("MIDI TO DMX")
-    # screen.fill(pygame.Color("black"))
-    # pygame.display.flip()
-    # background rect
-    # background_rect = pygame.Rect(0, 0, screen_width, screen_height)
+    else:
+        while midi_in.poll():
+            logging.debug(instrument + 'ERROR: unknown instrument type')
 
-    # initiate midi input
-    pygame.midi.init()
+    midi_in.close()
+    logging.debug(instrument + ' thread stopped')
 
-    # midi_in = pygame.midi.Input(pygame.midi.get_default_input_id())
-    # if no light output is observed, try changing the midi_in port. Use aconnect -i shell command to list midi ports
-    midi_in = pygame.midi.Input(3)
 
-    # turn off DMX light initially
-    # render_color(color.output_color.rgb)
+def render_color(color, channel):
+    mydmx.setChannel(channel, int(color[0] * 255))
+    mydmx.setChannel(channel + 1, int(color[1] * 255))
+    mydmx.setChannel(channel + 2, int(color[2] * 255))
+
+def dmx():
+
+    global mydmx
+
+    # set up frame limit
+    clock = pygame.time.Clock()
+
+    # initialize color class instances
+    keyboard_color = lib.MidiColor(12)
+    keyboard_color.change_mode(5)
+    drums_color = lib.MidiColor(12)
+    drums_color.change_mode(5)
+
+    # some dmx channels need to be set at a constant value
+    mydmx.setChannel(1, 255)
+    mydmx.setChannel(24, 255)
 
     while True:
-
-        # fps = clock.tick(FRAMES_PER_SECOND)
-
-        # for event in pygame.event.get():
-            # if (event.type == pygame.QUIT) or (event.type == pygame.KEYDOWN):
-            # if (event.type == pygame.KEYDOWN):
-                # midi_in.close()
-                # render_color([0, 0, 0])  # turn the lights off on exit
-                # sys.exit()
-
-        while midi_in.poll():
-            midi_event = midi_in.read(1)
-            # if midi_event[0][0][0] != 248:
-            print midi_event
-            if midi_event[0][0][0] == 144:
-                key_id = midi_event[0][0][1]
-                note = key_id % no_of_colors
-                # print "midi event: " + str(midi_event[0][0]) + " note: " + str(note)
-                if midi_event[0][0][2]:
-                    vel = midi_event[0][0][2]
-                    color.add_color(note, vel, VEL_MAX)
+        fps = clock.tick(60) # frame limit
+        while not (keyboardQ.empty() and drumsQ.empty()):
+            if not keyboardQ.empty():
+                midi_data = keyboardQ.get()
+                print midi_data
+                midi_data[0] %= 12
+                if midi_data[1]:
+                    keyboard_color.add_color(midi_data[0], midi_data[1], VEL_MAX)
                 else:
-                    color.rem_color(note)
-                # print color.output_color.rgb
+                    keyboard_color.rem_color(midi_data[0])
+            if not drumsQ.empty():
+                midi_data = drumsQ.get()
+                print midi_data
+                midi_data[0] %= 12
+                if midi_data[1]:
+                    drums_color.add_color(midi_data[0], midi_data[1], VEL_MAX)
+                else:
+                    drums_color.rem_color(midi_data[0])
+        # update color classes
+        keyboard_color.update()
+        drums_color.update()
+        # set dmx channels
+        render_color(keyboard_color.output_color.rgb, 2)
+        render_color(drums_color.output_color.rgb, 20)
+        # render all dmx channels
+        mydmx.render()
 
-        color.update()
-        # render_color(color.output_color.rgb)
 
-if __name__ == '__main__':
+# mydmx = pysimpledmx.DMXConnection('/dev/cu.usbserial-6AYP9O1D') # mac dmx com port
+mydmx = pysimpledmx.DMXConnection(6)  # windows dmx com port
+# mydmx = pysimpledmx.DMXConnection('/dev/ttyUSB0')  # linux com port
 
-    try:
-        main()
-    except KeyboardInterrupt:
-        print "\n\nprogram terminated\n"
-    finally:
-        pass
-        # mydmx.close()
+# pygame midi initialization
+pygame.init()
+pygame.midi.init()
+
+# print pygame.midi.get_default_input_id()
+
+# set up queues
+stopQ = Queue.Queue()
+keyboardQ = Queue.Queue()
+drumsQ  = Queue.Queue()
+
+keyboard_thread = threading.Thread(name='keybaord', target=instrument, args=('keyboard', 1))
+drums_thread = threading.Thread(name='drums', target=instrument, args=('drums', 2))
+
+keyboard_thread.start()
+drums_thread.start()
 
 
-
-
+try:
+    dmx()
+except KeyboardInterrupt:
+    print "\n\nterminating program..."
+finally:
+    # stop threads and clean up
+    stopQ.put('stop')
+    keyboard_thread.join()
+    drums_thread.join()
+    mydmx.close()
+    print "TERMINATED"
