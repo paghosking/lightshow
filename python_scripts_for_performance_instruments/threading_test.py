@@ -21,29 +21,46 @@ logging.basicConfig(level=logging.DEBUG,
                     format='[%(levelname)s] (%(threadName)-10s) %(message)s',
                     )
 
-def instrument(instrument):
+def instrument(instrument, midi_port):
     logging.debug('starting instrument thread for ' + instrument)
+    midi_in = pygame.midi.Input(midi_port)
 
     if instrument == 'keyboard':
+
         while stopQ.empty():
-            logging.debug(instrument + 'recieving keyboard midi input... ')
+            while midi_in.poll():
+                midi_event = midi_in.read(1)
+                # if midi_event[0][0][0] != 248:
+                logging.debug(midi_event)
+
     elif instrument == 'drums':
+
         while stopQ.empty():
-            logging.debug(instrument + 'recieving drums midi input...')
+            while midi_in.poll():
+                midi_event = midi_in.read(1)
+                # if midi_event[0][0][0] != 248:
+                logging.debug(midi_event)
+
     else:
         logging.debug(instrument + 'ERROR: unknown instrument type')
 
+    midi_in.close()
     logging.debug(instrument + ' thread stopped')
 
 def dmx():
     while True:
         pass
 
+
+# pygame midi initialization
+pygame.init()
+pygame.midi.init()
+
 # set up queues
 stopQ = Queue.Queue()
 
-keyboard_thread = threading.Thread(name='keybaord', target=instrument, args=('keyboard',))
-drums_thread = threading.Thread(name='drums', target=instrument, args=('drums',))
+keyboard_thread = threading.Thread(name='keybaord', target=instrument, args=('keyboard', 3))
+drums_thread = threading.Thread(name='drums', target=instrument, args=('drums', 5))
 
 keyboard_thread.start()
 drums_thread.start()
