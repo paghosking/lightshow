@@ -1,7 +1,20 @@
+#!/usr/bin/python
+# Python midi to color script for PERFORMANCE INSTRUMENTS
+import sys
+
+import pygame
+import pygame.midi
+
+import pysimpledmx
+
+import lib
 import threading
 import Queue
 import logging
 import time
+
+# settings
+VEL_MAX = 127
 
 # config for logging (prints for debugging threads)
 logging.basicConfig(level=logging.DEBUG,
@@ -22,9 +35,12 @@ def instrument(instrument):
 
     logging.debug(instrument + ' thread stopped')
 
+def dmx():
+    while True:
+        pass
+
 # set up queues
 stopQ = Queue.Queue()
-
 
 keyboard_thread = threading.Thread(name='keybaord', target=instrument, args=('keyboard',))
 drums_thread = threading.Thread(name='drums', target=instrument, args=('drums',))
@@ -32,9 +48,14 @@ drums_thread = threading.Thread(name='drums', target=instrument, args=('drums',)
 keyboard_thread.start()
 drums_thread.start()
 
-time.sleep(1)
 
-stopQ.put('stop')
-
-keyboard_thread.join()
-drums_thread.join()
+try:
+    dmx()
+except KeyboardInterrupt:
+    print "\n\nterminating program..."
+finally:
+    # stop threads and clean up
+    stopQ.put('stop')
+    keyboard_thread.join()
+    drums_thread.join()
+    print "TERMINATED"
