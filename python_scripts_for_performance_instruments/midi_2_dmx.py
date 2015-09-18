@@ -91,7 +91,17 @@ def dmx():
 
     # set modes for different color palettes
     print 'selecting color scheme: %s ' % sys.argv[1]
-    if  sys.argv[1] == '1':
+    if  sys.argv[1] == ('h' or 'help'):
+        print '1 = RGB'
+        print '2 = RGB - swap instruments'
+        print '3 = Analogous color scheme - redish'
+        print '4 = Analogous color scheme - bluish'
+        print '5 = Analogous color scheme - greenish'
+        print '6 = Analogous color scheme - triadic 1'
+        print '7 = Analogous color scheme - triadic 2'
+        print '8 = Rainbow color scheme'
+        sys.exit(1)
+    elif sys.argv[1] == '1':
         print '-----------------------------------'
         print 'RGB color scheme - very distinctive'
         print '-----------------------------------'
@@ -140,6 +150,13 @@ def dmx():
         keyboard_color.change_mode(20)
         keyboard_color_1.change_mode(21)
         drums_color.change_mode(19)
+    elif sys.argv[1] == '8':
+        print '-----------------------------------'
+        print 'Rainbow color scheme'
+        print '-----------------------------------'
+        drums_color.change_mode(22)
+        keyboard_color.change_mode(23)
+        keyboard_color_1.change_mode(24)
     else:
         keyboard_color.change_mode(4)
         keyboard_color_1.change_mode(5)
