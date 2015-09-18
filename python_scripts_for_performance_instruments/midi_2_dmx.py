@@ -36,8 +36,8 @@ def instrument(instrument, midi_port):
         while stopQ.empty():
             while midi_in.poll():
                 midi_event = midi_in.read(1)
-                if midi_event[0][0][0] != 248:
-                    logging.debug(midi_event)
+                # if midi_event[0][0][0] != 248:
+                #     logging.debug(midi_event)
                 if midi_event[0][0][0] in valid_key_types:
                     key_id = midi_event[0][0][1]
                     if midi_event[0][0][0] == 144:
@@ -86,17 +86,69 @@ def dmx():
 
     # initialize color class instances
     keyboard_color = lib.MidiColor(12)
-    keyboard_color.change_mode(5)
-
     keyboard_color_1 = lib.MidiColor(12)
-    keyboard_color_1.change_mode(5)
-
     drums_color = lib.MidiColor(12)
-    drums_color.change_mode(1)
+
+    # set modes for different color palettes
+    print 'selecting color scheme: %s ' % sys.argv[1]
+    if  sys.argv[1] == '1':
+        print '-----------------------------------'
+        print 'RGB color scheme - very distinctive'
+        print '-----------------------------------'
+        keyboard_color.change_mode(4)
+        keyboard_color_1.change_mode(5)
+        drums_color.change_mode(1)
+    elif sys.argv[1] == '2':
+        print '-----------------------------------'
+        print 'RGB color scheme - very distinctive'
+        print '-----------------------------------'
+        keyboard_color.change_mode(6)
+        keyboard_color_1.change_mode(4)
+        drums_color.change_mode(2)
+    elif sys.argv[1] == '3':
+        print '-----------------------------------'
+        print 'Analogous color scheme - redish'
+        print '-----------------------------------'
+        keyboard_color.change_mode(8)
+        keyboard_color_1.change_mode(9)
+        drums_color.change_mode(7)
+    elif sys.argv[1] == '4':
+        print '-----------------------------------'
+        print 'Analogous color scheme - bluish'
+        print '-----------------------------------'
+        keyboard_color.change_mode(11)
+        keyboard_color_1.change_mode(12)
+        drums_color.change_mode(10)
+    elif sys.argv[1] == '5':
+        print '-----------------------------------'
+        print 'Analogous color scheme - greenish'
+        print '-----------------------------------'
+        keyboard_color.change_mode(14)
+        keyboard_color_1.change_mode(15)
+        drums_color.change_mode(13)
+    elif sys.argv[1] == '6':
+        print '-----------------------------------'
+        print 'Analogous color scheme - triadic 1'
+        print '-----------------------------------'
+        keyboard_color.change_mode(17)
+        keyboard_color_1.change_mode(18)
+        drums_color.change_mode(16)
+    elif sys.argv[1] == '7':
+        print '-----------------------------------'
+        print 'Analogous color scheme - triadic 2'
+        print '-----------------------------------'
+        keyboard_color.change_mode(20)
+        keyboard_color_1.change_mode(21)
+        drums_color.change_mode(19)
+    else:
+        keyboard_color.change_mode(4)
+        keyboard_color_1.change_mode(5)
+        drums_color.change_mode(1)
 
     # some dmx channels need to be set at a constant value
-    # mydmx.setChannel(1, 255)
-    # mydmx.setChannel(24, 255)
+    mydmx.setChannel(3, 255)
+    mydmx.setChannel(52, 255)
+    mydmx.setChannel(12, 255)
 
     while True:
         fps = clock.tick(60) # frame limit
@@ -131,23 +183,23 @@ def dmx():
         keyboard_color_1.update()
         drums_color.update()
         # set dmx channels
-        render_color(keyboard_color.output_color.rgb, 16)
-        render_color(keyboard_color.output_color.rgb, 22)
+        #render_color(keyboard_color.output_color.rgb, 16)
+        #render_color(keyboard_color.output_color.rgb, 22)
         render_color(keyboard_color.output_color.rgb, 4)
-        render_color(keyboard_color.output_color.rgb, 10)
+        #render_color(keyboard_color.output_color.rgb, 10)
 
-        render_color(keyboard_color_1.output_color.rgb, 19)
-        render_color(keyboard_color_1.output_color.rgb, 25)
-        render_color(keyboard_color_1.output_color.rgb, 7)
+        #render_color(keyboard_color_1.output_color.rgb, 19)
+        #render_color(keyboard_color_1.output_color.rgb, 25)
+        #render_color(keyboard_color_1.output_color.rgb, 7)
         render_color(keyboard_color_1.output_color.rgb, 13)
 
-        render_color(drums_color.output_color.rgb, 28)
+        render_color(drums_color.output_color.rgb, 48)
         # render all dmx channels
         mydmx.render()
 
 
 # mydmx = pysimpledmx.DMXConnection('/dev/cu.usbserial-6AYP9O1D') # mac dmx com port
-mydmx = pysimpledmx.DMXConnection(6)  # windows dmx com port
+mydmx = pysimpledmx.DMXConnection(7)  # windows dmx com port
 # mydmx = pysimpledmx.DMXConnection('/dev/ttyUSB0')  # linux com port
 
 # pygame midi initialization
@@ -161,8 +213,8 @@ stopQ = Queue.Queue()
 keyboardQ = Queue.Queue()
 drumsQ = Queue.Queue()
 
-keyboard_thread = threading.Thread(name='keyboard', target=instrument, args=('keyboard', 1))
-drums_thread = threading.Thread(name='drums', target=instrument, args=('drums', 2))
+keyboard_thread = threading.Thread(name='keyboard', target=instrument, args=('keyboard', 2))
+drums_thread = threading.Thread(name='drums', target=instrument, args=('drums', 1))
 
 keyboard_thread.start()
 drums_thread.start()

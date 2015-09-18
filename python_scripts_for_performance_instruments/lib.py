@@ -23,80 +23,316 @@ class MidiColor:
     # define the different color palette modes
     def change_mode(self, mode):
         self.output_color = chroma.Color('#000000')
-        if mode == 1: # drum palette 1 (for such and such a song)
-            self.channels = [49, 51, 46, 42, 31, 48, 47, 43, 85, 33]
-            # self.no_of_colors = len(self.channels)
+        if mode == 1: # drum palette 1 (reds)
+            self.channels = [33, 43, 47, 48, 31, 51, 46, 49, 42, 85] # in order of basines
+            for i in range(0,len(self.channels)):
+                hue = i*int(45/(len(self.channels)))
+                self.lookup_table[self.channels[i]] = chroma.Color((hue, 1, 1), 'HSV')  # C
+            # self.lookup_table[self.channels[0]] = chroma.Color('#ff00ff')  # C
+            # self.lookup_table[self.channels[1]] = chroma.Color('#ff0000')  # C#
+            # self.lookup_table[self.channels[2]] = chroma.Color('#00ffff')  # D
+            # self.lookup_table[self.channels[3]] = chroma.Color('#ffff00')  # D#
+            # self.lookup_table[self.channels[4]] = chroma.Color('#00ff00')  # E
+            # self.lookup_table[self.channels[5]] = chroma.Color('#ff00ff')  # F
+            # self.lookup_table[self.channels[6]] = chroma.Color('#00ffff')  # F#
+            # self.lookup_table[self.channels[7]] = chroma.Color('#ffff00')  # G
+            # self.lookup_table[self.channels[8]] = chroma.Color('#0000ff')  # G#
+            # self.lookup_table[self.channels[9]] = chroma.Color('#00ff00')  # A
 
-            self.lookup_table[self.channels[0]] = chroma.Color('#ff00ff')  # C
-            self.lookup_table[self.channels[1]] = chroma.Color('#ff0000')  # C#
-            self.lookup_table[self.channels[2]] = chroma.Color('#00ffff')  # D
-            self.lookup_table[self.channels[3]] = chroma.Color('#ffff00')  # D#
-            self.lookup_table[self.channels[4]] = chroma.Color('#00ff00')  # E
-            self.lookup_table[self.channels[5]] = chroma.Color('#ff00ff')  # F
-            self.lookup_table[self.channels[6]] = chroma.Color('#00ffff')  # F#
-            self.lookup_table[self.channels[7]] = chroma.Color('#ffffff')  # G
-            self.lookup_table[self.channels[8]] = chroma.Color('#0000ff')  # G#
-            self.lookup_table[self.channels[9]] = chroma.Color('#00ff00')  # A
+        elif mode == 2: # drum color palette (greens)
+            self.channels = [33, 43, 47, 48, 31, 51, 46, 49, 42, 85] # in order of basines
+            for i in range(0,len(self.channels)):
+                hue = i*int(45/(len(self.channels)))+90
+                self.lookup_table[self.channels[i]] = chroma.Color((hue, 1, 1), 'HSV')  # C
+            # self.lookup_table[self.channels[0]] = chroma.Color('#ff00ff')  # C
+            # self.lookup_table[self.channels[1]] = chroma.Color('#ff0000')  # C#
+            # self.lookup_table[self.channels[2]] = chroma.Color('#00ffff')  # D
+            # self.lookup_table[self.channels[3]] = chroma.Color('#ffff00')  # D#
+            # self.lookup_table[self.channels[4]] = chroma.Color('#00ff00')  # E
+            # self.lookup_table[self.channels[5]] = chroma.Color('#ff00ff')  # F
+            # self.lookup_table[self.channels[6]] = chroma.Color('#00ffff')  # F#
+            # self.lookup_table[self.channels[7]] = chroma.Color('#ffff00')  # G
+            # self.lookup_table[self.channels[8]] = chroma.Color('#0000ff')  # G#
+            # self.lookup_table[self.channels[9]] = chroma.Color('#00ff00')  # A
+        elif mode == 3: # drums color palette (blues)
+            self.channels = [33, 43, 47, 48, 31, 51, 46, 49, 42, 85] # in order of basines
+            for i in range(0,len(self.channels)):
+                hue = i*int(45/(len(self.channels)))+210
+                self.lookup_table[self.channels[i]] = chroma.Color((hue, 1, 1), 'HSV')  # C
+            # self.lookup_table[self.channels[0]] = chroma.Color('#ff00ff')  # C
+            # self.lookup_table[self.channels[1]] = chroma.Color('#ff0000')  # C#
+            # self.lookup_table[self.channels[2]] = chroma.Color('#00ffff')  # D
+            # self.lookup_table[self.channels[3]] = chroma.Color('#ffff00')  # D#
+            # self.lookup_table[self.channels[4]] = chroma.Color('#00ff00')  # E
+            # self.lookup_table[self.channels[5]] = chroma.Color('#ff00ff')  # F
+            # self.lookup_table[self.channels[6]] = chroma.Color('#00ffff')  # F#
+            # self.lookup_table[self.channels[7]] = chroma.Color('#ffff00')  # G
+            # self.lookup_table[self.channels[8]] = chroma.Color('#0000ff')  # G#
+            # self.lookup_table[self.channels[9]] = chroma.Color('#00ff00')  # A
+        elif mode == 4: # mode for keyboard (blues)
+            self.channels = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] # in order of basines
+            for i in range(0, len(self.channels)):
+                hue = i*int(45/(len(self.channels))) + 210
+                self.lookup_table[self.channels[i]] = chroma.Color((hue, 1, 1), 'HSV')  # C
+            # self.lookup_table[self.channels[0]] = chroma.Color('#ff00ff')  # C
+            # self.lookup_table[self.channels[1]] = chroma.Color('#ff0000')  # C#
+            # self.lookup_table[self.channels[2]] = chroma.Color('#00ffff')  # D
+            # self.lookup_table[self.channels[3]] = chroma.Color('#ffff00')  # D#
+            # self.lookup_table[self.channels[4]] = chroma.Color('#00ff00')  # E
+            # self.lookup_table[self.channels[5]] = chroma.Color('#ff00ff')  # F
+            # self.lookup_table[self.channels[6]] = chroma.Color('#00ffff')  # F#
+            # self.lookup_table[self.channels[7]] = chroma.Color('#ffff00')  # G
+            # self.lookup_table[self.channels[8]] = chroma.Color('#0000ff')  # G#
+            # self.lookup_table[self.channels[9]] = chroma.Color('#00ff00')  # A
+        elif mode == 5: # mode for keyboard (Greens)
+            self.channels = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] # in order of basines
+            for i in range(0, len(self.channels)):
+                hue = i*int(45/(len(self.channels))) + 90
+                self.lookup_table[self.channels[i]] = chroma.Color((hue, 1, 1), 'HSV')  # C
+            # self.lookup_table[self.channels[0]] = chroma.Color('#ff00ff')  # C
+            # self.lookup_table[self.channels[1]] = chroma.Color('#ff0000')  # C#
+            # self.lookup_table[self.channels[2]] = chroma.Color('#00ffff')  # D
+            # self.lookup_table[self.channels[3]] = chroma.Color('#ffff00')  # D#
+            # self.lookup_table[self.channels[4]] = chroma.Color('#00ff00')  # E
+            # self.lookup_table[self.channels[5]] = chroma.Color('#ff00ff')  # F
+            # self.lookup_table[self.channels[6]] = chroma.Color('#00ffff')  # F#
+            # self.lookup_table[self.channels[7]] = chroma.Color('#ffff00')  # G
+            # self.lookup_table[self.channels[8]] = chroma.Color('#0000ff')  # G#
+            # self.lookup_table[self.channels[9]] = chroma.Color('#00ff00')  # A
 
-        elif mode == 2:
-            self.no_of_colors = 12
-            self.lookup_table[0] = chroma.Color('#ff0000')  # C
-            self.lookup_table[1] = chroma.Color('#ff0000')  # C#
-            self.lookup_table[2] = chroma.Color('#ff0000')  # D
-            self.lookup_table[3] = chroma.Color('#ff0000')  # D#
-            self.lookup_table[4] = chroma.Color('#ff0000')  # E
-            self.lookup_table[5] = chroma.Color('#ff0000')  # F
-            self.lookup_table[6] = chroma.Color('#ff0000')  # F#
-            self.lookup_table[7] = chroma.Color('#ff0000')  # G
-            self.lookup_table[8] = chroma.Color('#ff0000')  # G#
-            self.lookup_table[9] = chroma.Color('#ff0000')  # A
-            self.lookup_table[10] = chroma.Color('#ff0000')  # A#
-            self.lookup_table[11] = chroma.Color('#ff0000')  # B
-        elif mode == 3:
-            self.no_of_colors = 12
-            self.lookup_table[0] = chroma.Color('#00ff00')  # C
-            self.lookup_table[1] = chroma.Color('#00ff00')  # C#
-            self.lookup_table[2] = chroma.Color('#00ff00')  # D
-            self.lookup_table[3] = chroma.Color('#00ff00')  # D#
-            self.lookup_table[4] = chroma.Color('#00ff00')  # E
-            self.lookup_table[5] = chroma.Color('#00ff00')  # F
-            self.lookup_table[6] = chroma.Color('#00ff00')  # F#
-            self.lookup_table[7] = chroma.Color('#00ff00')  # G
-            self.lookup_table[8] = chroma.Color('#00ff00')  # G#
-            self.lookup_table[9] = chroma.Color('#00ff00')  # A
-            self.lookup_table[10] = chroma.Color('#00ff00')  # A#
-            self.lookup_table[11] = chroma.Color('#00ff00')  # B
-        elif mode == 4:
-            self.no_of_colors = 12
-            self.lookup_table[0] = chroma.Color('#0000ff')  # C
-            self.lookup_table[1] = chroma.Color('#0000ff')  # C#
-            self.lookup_table[2] = chroma.Color('#0000ff')  # D
-            self.lookup_table[3] = chroma.Color('#0000ff')  # D#
-            self.lookup_table[4] = chroma.Color('#0000ff')  # E
-            self.lookup_table[5] = chroma.Color('#0000ff')  # F
-            self.lookup_table[6] = chroma.Color('#0000ff')  # F#
-            self.lookup_table[7] = chroma.Color('#0000ff')  # G
-            self.lookup_table[8] = chroma.Color('#0000ff')  # G#
-            self.lookup_table[9] = chroma.Color('#0000ff')  # A
-            self.lookup_table[10] = chroma.Color('#0000ff')  # A#
-            self.lookup_table[11] = chroma.Color('#0000ff')  # B
-        else:
-            self.channels = range(0, 12)
-            self.no_of_colors = len(self.channels)
-            self.no_of_colors = 12
-            self.lookup_table[0] = chroma.Color('#28ff00')  # C
-            self.lookup_table[1] = chroma.Color('#00ffe8')  # C#
-            self.lookup_table[2] = chroma.Color('#007cff')  # D
-            self.lookup_table[3] = chroma.Color('#0500ff')  # D#
-            self.lookup_table[4] = chroma.Color('#4500ea')  # E
-            self.lookup_table[5] = chroma.Color('#57009e')  # F
-            self.lookup_table[6] = chroma.Color('#740000')  # F#
-            self.lookup_table[7] = chroma.Color('#b30000')  # G
-            self.lookup_table[8] = chroma.Color('#ee0000')  # G#
-            self.lookup_table[9] = chroma.Color('#ff6300')  # A
-            self.lookup_table[10] = chroma.Color('#ffec00')  # A#
-            self.lookup_table[11] = chroma.Color('#99ff00')  # B
+        elif mode == 6: # mode for keyboard (reds)
+            self.channels = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] # in order of basines
+            for i in range(0, len(self.channels)):
+                hue = i*int(45/(len(self.channels)))
+                self.lookup_table[self.channels[i]] = chroma.Color((hue, 1, 1), 'HSV')  # C
+            # self.lookup_table[self.channels[0]] = chroma.Color('#ff00ff')  # C
+            # self.lookup_table[self.channels[1]] = chroma.Color('#ff0000')  # C#
+            # self.lookup_table[self.channels[2]] = chroma.Color('#00ffff')  # D
+            # self.lookup_table[self.channels[3]] = chroma.Color('#ffff00')  # D#
+            # self.lookup_table[self.channels[4]] = chroma.Color('#00ff00')  # E
+            # self.lookup_table[self.channels[5]] = chroma.Color('#ff00ff')  # F
+            # self.lookup_table[self.channels[6]] = chroma.Color('#00ffff')  # F#
+            # self.lookup_table[self.channels[7]] = chroma.Color('#ffff00')  # G
+            # self.lookup_table[self.channels[8]] = chroma.Color('#0000ff')  # G#
+            # self.lookup_table[self.channels[9]] = chroma.Color('#00ff00')  # A
+        elif mode == 7: # mode for drums
+            self.channels = [33, 43, 47, 48, 31, 51, 46, 49, 42, 85] # in order of basines
+            for i in range(0,len(self.channels)):
+                hue = i*int(6/(len(self.channels)))
+                self.lookup_table[self.channels[i]] = chroma.Color((hue, 1, 1), 'HSV')  # C
+            # self.lookup_table[self.channels[0]] = chroma.Color('#ff00ff')  # C
+            # self.lookup_table[self.channels[1]] = chroma.Color('#ff0000')  # C#
+            # self.lookup_table[self.channels[2]] = chroma.Color('#00ffff')  # D
+            # self.lookup_table[self.channels[3]] = chroma.Color('#ffff00')  # D#
+            # self.lookup_table[self.channels[4]] = chroma.Color('#00ff00')  # E
+            # self.lookup_table[self.channels[5]] = chroma.Color('#ff00ff')  # F
+            # self.lookup_table[self.channels[6]] = chroma.Color('#00ffff')  # F#
+            # self.lookup_table[self.channels[7]] = chroma.Color('#ffff00')  # G
+            # self.lookup_table[self.channels[8]] = chroma.Color('#0000ff')  # G#
+            # self.lookup_table[self.channels[9]] = chroma.Color('#00ff00')  # A
+        elif mode == 8: # mode for keyboard
+            self.channels = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] # in order of basines
+            for i in range(0, len(self.channels)):
+                hue = i*int(6/(len(self.channels))) + 327
+                self.lookup_table[self.channels[i]] = chroma.Color((hue, 1, 1), 'HSV')
+            # self.lookup_table[self.channels[1]] = chroma.Color('#ff0000')  # C#
+            # self.lookup_table[self.channels[2]] = chroma.Color('#00ffff')  # D
+            # self.lookup_table[self.channels[3]] = chroma.Color('#ffff00')  # D#
+            # self.lookup_table[self.channels[4]] = chroma.Color('#00ff00')  # E
+            # self.lookup_table[self.channels[5]] = chroma.Color('#ff00ff')  # F
+            # self.lookup_table[self.channels[6]] = chroma.Color('#00ffff')  # F#
+            # self.lookup_table[self.channels[7]] = chroma.Color('#ffff00')  # G
+            # self.lookup_table[self.channels[8]] = chroma.Color('#0000ff')  # G#
+            # self.lookup_table[self.channels[9]] = chroma.Color('#00ff00')  # A
+        elif mode == 9: # mode for keyboard (blues)
+            self.channels = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] # in order of basines
+            for i in range(0, len(self.channels)):
+                hue = i*int(6/(len(self.channels))) + 27
+                self.lookup_table[self.channels[i]] = chroma.Color((hue, 1, 1), 'HSV')
+            # self.lookup_table[self.channels[1]] = chroma.Color('#ff0000')  # C#
+            # self.lookup_table[self.channels[2]] = chroma.Color('#00ffff')  # D
+            # self.lookup_table[self.channels[3]] = chroma.Color('#ffff00')  # D#
+            # self.lookup_table[self.channels[4]] = chroma.Color('#00ff00')  # E
+            # self.lookup_table[self.channels[5]] = chroma.Color('#ff00ff')  # F
+            # self.lookup_table[self.channels[6]] = chroma.Color('#00ffff')  # F#
+            # self.lookup_table[self.channels[7]] = chroma.Color('#ffff00')  # G
+            # self.lookup_table[self.channels[8]] = chroma.Color('#0000ff')  # G#
+            # self.lookup_table[self.channels[9]] = chroma.Color('#00ff00')  # A
+        elif mode == 10: # mode for drums
+            self.channels = [33, 43, 47, 48, 31, 51, 46, 49, 42, 85] # in order of basines
+            for i in range(0,len(self.channels)):
+                hue = i*int(6/(len(self.channels))) + 260
+                self.lookup_table[self.channels[i]] = chroma.Color((hue, 1, 1), 'HSV')
+            # self.lookup_table[self.channels[0]] = chroma.Color('#ff00ff')  # C
+            # self.lookup_table[self.channels[1]] = chroma.Color('#ff0000')  # C#
+            # self.lookup_table[self.channels[2]] = chroma.Color('#00ffff')  # D
+            # self.lookup_table[self.channels[3]] = chroma.Color('#ffff00')  # D#
+            # self.lookup_table[self.channels[4]] = chroma.Color('#00ff00')  # E
+            # self.lookup_table[self.channels[5]] = chroma.Color('#ff00ff')  # F
+            # self.lookup_table[self.channels[6]] = chroma.Color('#00ffff')  # F#
+            # self.lookup_table[self.channels[7]] = chroma.Color('#ffff00')  # G
+            # self.lookup_table[self.channels[8]] = chroma.Color('#0000ff')  # G#
+            # self.lookup_table[self.channels[9]] = chroma.Color('#00ff00')  # A
+        elif mode == 11: # mode for keyboard
+            self.channels = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] # in order of basines
+            for i in range(0, len(self.channels)):
+                hue = i*int(6/(len(self.channels))) + 293
+                self.lookup_table[self.channels[i]] = chroma.Color((hue, 1, 1), 'HSV')
+            # self.lookup_table[self.channels[1]] = chroma.Color('#ff0000')  # C#
+            # self.lookup_table[self.channels[2]] = chroma.Color('#00ffff')  # D
+            # self.lookup_table[self.channels[3]] = chroma.Color('#ffff00')  # D#
+            # self.lookup_table[self.channels[4]] = chroma.Color('#00ff00')  # E
+            # self.lookup_table[self.channels[5]] = chroma.Color('#ff00ff')  # F
+            # self.lookup_table[self.channels[6]] = chroma.Color('#00ffff')  # F#
+            # self.lookup_table[self.channels[7]] = chroma.Color('#ffff00')  # G
+            # self.lookup_table[self.channels[8]] = chroma.Color('#0000ff')  # G#
+            # self.lookup_table[self.channels[9]] = chroma.Color('#00ff00')  # A
+        elif mode == 12: # mode for keyboard
+            self.channels = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] # in order of basines
+            for i in range(0, len(self.channels)):
+                hue = i*int(6/(len(self.channels))) + 220
+                self.lookup_table[self.channels[i]] = chroma.Color((hue, 1, 1), 'HSV')
+            # self.lookup_table[self.channels[1]] = chroma.Color('#ff0000')  # C#
+            # self.lookup_table[self.channels[2]] = chroma.Color('#00ffff')  # D
+            # self.lookup_table[self.channels[3]] = chroma.Color('#ffff00')  # D#
+            # self.lookup_table[self.channels[4]] = chroma.Color('#00ff00')  # E
+            # self.lookup_table[self.channels[5]] = chroma.Color('#ff00ff')  # F
+            # self.lookup_table[self.channels[6]] = chroma.Color('#00ffff')  # F#
+            # self.lookup_table[self.channels[7]] = chroma.Color('#ffff00')  # G
+            # self.lookup_table[self.channels[8]] = chroma.Color('#0000ff')  # G#
+            # self.lookup_table[self.channels[9]] = chroma.Color('#00ff00')  # A
+        elif mode == 13: # mode for drums
+            self.channels = [33, 43, 47, 48, 31, 51, 46, 49, 42, 85] # in order of basines
+            for i in range(0,len(self.channels)):
+                hue = i*int(6/(len(self.channels))) + 150
+                self.lookup_table[self.channels[i]] = chroma.Color((hue, 1, 1), 'HSV')
+            # self.lookup_table[self.channels[0]] = chroma.Color('#ff00ff')  # C
+            # self.lookup_table[self.channels[1]] = chroma.Color('#ff0000')  # C#
+            # self.lookup_table[self.channels[2]] = chroma.Color('#00ffff')  # D
+            # self.lookup_table[self.channels[3]] = chroma.Color('#ffff00')  # D#
+            # self.lookup_table[self.channels[4]] = chroma.Color('#00ff00')  # E
+            # self.lookup_table[self.channels[5]] = chroma.Color('#ff00ff')  # F
+            # self.lookup_table[self.channels[6]] = chroma.Color('#00ffff')  # F#
+            # self.lookup_table[self.channels[7]] = chroma.Color('#ffff00')  # G
+            # self.lookup_table[self.channels[8]] = chroma.Color('#0000ff')  # G#
+            # self.lookup_table[self.channels[9]] = chroma.Color('#00ff00')  # A
+        elif mode == 14: # mode for keyboard
+            self.channels = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] # in order of basines
+            for i in range(0, len(self.channels)):
+                hue = i*int(6/(len(self.channels))) + 120
+                self.lookup_table[self.channels[i]] = chroma.Color((hue, 1, 1), 'HSV')
+            # self.lookup_table[self.channels[1]] = chroma.Color('#ff0000')  # C#
+            # self.lookup_table[self.channels[2]] = chroma.Color('#00ffff')  # D
+            # self.lookup_table[self.channels[3]] = chroma.Color('#ffff00')  # D#
+            # self.lookup_table[self.channels[4]] = chroma.Color('#00ff00')  # E
+            # self.lookup_table[self.channels[5]] = chroma.Color('#ff00ff')  # F
+            # self.lookup_table[self.channels[6]] = chroma.Color('#00ffff')  # F#
+            # self.lookup_table[self.channels[7]] = chroma.Color('#ffff00')  # G
+            # self.lookup_table[self.channels[8]] = chroma.Color('#0000ff')  # G#
+            # self.lookup_table[self.channels[9]] = chroma.Color('#00ff00')  # A
+        elif mode == 15: # mode for keyboard
+            self.channels = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] # in order of basines
+            for i in range(0, len(self.channels)):
+                hue = i*int(6/(len(self.channels))) + 180
+                self.lookup_table[self.channels[i]] = chroma.Color((hue, 1, 1), 'HSV')
+            # self.lookup_table[self.channels[1]] = chroma.Color('#ff0000')  # C#
+            # self.lookup_table[self.channels[2]] = chroma.Color('#00ffff')  # D
+            # self.lookup_table[self.channels[3]] = chroma.Color('#ffff00')  # D#
+            # self.lookup_table[self.channels[4]] = chroma.Color('#00ff00')  # E
+            # self.lookup_table[self.channels[5]] = chroma.Color('#ff00ff')  # F
+            # self.lookup_table[self.channels[6]] = chroma.Color('#00ffff')  # F#
+            # self.lookup_table[self.channels[7]] = chroma.Color('#ffff00')  # G
+            # self.lookup_table[self.channels[8]] = chroma.Color('#0000ff')  # G#
+            # self.lookup_table[self.channels[9]] = chroma.Color('#00ff00')  # A
 
+        elif mode == 16: # mode for drums
+            self.channels = [33, 43, 47, 48, 31, 51, 46, 49, 42, 85] # in order of basines
+            for i in range(0,len(self.channels)):
+                hue = i*int(6/(len(self.channels))) + 30
+                self.lookup_table[self.channels[i]] = chroma.Color((hue, 1, 1), 'HSV')
+            # self.lookup_table[self.channels[0]] = chroma.Color('#ff00ff')  # C
+            # self.lookup_table[self.channels[1]] = chroma.Color('#ff0000')  # C#
+            # self.lookup_table[self.channels[2]] = chroma.Color('#00ffff')  # D
+            # self.lookup_table[self.channels[3]] = chroma.Color('#ffff00')  # D#
+            # self.lookup_table[self.channels[4]] = chroma.Color('#00ff00')  # E
+            # self.lookup_table[self.channels[5]] = chroma.Color('#ff00ff')  # F
+            # self.lookup_table[self.channels[6]] = chroma.Color('#00ffff')  # F#
+            # self.lookup_table[self.channels[7]] = chroma.Color('#ffff00')  # G
+            # self.lookup_table[self.channels[8]] = chroma.Color('#0000ff')  # G#
+            # self.lookup_table[self.channels[9]] = chroma.Color('#00ff00')  # A
+        elif mode == 17: # mode for keyboard
+            self.channels = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] # in order of basines
+            for i in range(0, len(self.channels)):
+                hue = i*int(6/(len(self.channels))) + 240
+                self.lookup_table[self.channels[i]] = chroma.Color((hue, 1, 1), 'HSV')
+            # self.lookup_table[self.channels[1]] = chroma.Color('#ff0000')  # C#
+            # self.lookup_table[self.channels[2]] = chroma.Color('#00ffff')  # D
+            # self.lookup_table[self.channels[3]] = chroma.Color('#ffff00')  # D#
+            # self.lookup_table[self.channels[4]] = chroma.Color('#00ff00')  # E
+            # self.lookup_table[self.channels[5]] = chroma.Color('#ff00ff')  # F
+            # self.lookup_table[self.channels[6]] = chroma.Color('#00ffff')  # F#
+            # self.lookup_table[self.channels[7]] = chroma.Color('#ffff00')  # G
+            # self.lookup_table[self.channels[8]] = chroma.Color('#0000ff')  # G#
+            # self.lookup_table[self.channels[9]] = chroma.Color('#00ff00')  # A
+        elif mode == 18: # mode for keyboard
+            self.channels = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] # in order of basines
+            for i in range(0, len(self.channels)):
+                hue = i*int(6/(len(self.channels))) + 140
+                self.lookup_table[self.channels[i]] = chroma.Color((hue, 1, 1), 'HSV')
+            # self.lookup_table[self.channels[1]] = chroma.Color('#ff0000')  # C#
+            # self.lookup_table[self.channels[2]] = chroma.Color('#00ffff')  # D
+            # self.lookup_table[self.channels[3]] = chroma.Color('#ffff00')  # D#
+            # self.lookup_table[self.channels[4]] = chroma.Color('#00ff00')  # E
+            # self.lookup_table[self.channels[5]] = chroma.Color('#ff00ff')  # F
+            # self.lookup_table[self.channels[6]] = chroma.Color('#00ffff')  # F#
+            # self.lookup_table[self.channels[7]] = chroma.Color('#ffff00')  # G
+            # self.lookup_table[self.channels[8]] = chroma.Color('#0000ff')  # G#
+            # self.lookup_table[self.channels[9]] = chroma.Color('#00ff00')  # A
+
+
+        elif mode == 19: # mode for drums
+            self.channels = [33, 43, 47, 48, 31, 51, 46, 49, 42, 85] # in order of basines
+            for i in range(0,len(self.channels)):
+                hue = i*int(6/(len(self.channels))) + 210
+                self.lookup_table[self.channels[i]] = chroma.Color((hue, 1, 1), 'HSV')
+            # self.lookup_table[self.channels[0]] = chroma.Color('#ff00ff')  # C
+            # self.lookup_table[self.channels[1]] = chroma.Color('#ff0000')  # C#
+            # self.lookup_table[self.channels[2]] = chroma.Color('#00ffff')  # D
+            # self.lookup_table[self.channels[3]] = chroma.Color('#ffff00')  # D#
+            # self.lookup_table[self.channels[4]] = chroma.Color('#00ff00')  # E
+            # self.lookup_table[self.channels[5]] = chroma.Color('#ff00ff')  # F
+            # self.lookup_table[self.channels[6]] = chroma.Color('#00ffff')  # F#
+            # self.lookup_table[self.channels[7]] = chroma.Color('#ffff00')  # G
+            # self.lookup_table[self.channels[8]] = chroma.Color('#0000ff')  # G#
+            # self.lookup_table[self.channels[9]] = chroma.Color('#00ff00')  # A
+        elif mode == 20: # mode for keyboard
+            self.channels = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] # in order of basines
+            for i in range(0, len(self.channels)):
+                hue = i*int(6/(len(self.channels)))
+                self.lookup_table[self.channels[i]] = chroma.Color((hue, 1, 1), 'HSV')
+            # self.lookup_table[self.channels[1]] = chroma.Color('#ff0000')  # C#
+            # self.lookup_table[self.channels[2]] = chroma.Color('#00ffff')  # D
+            # self.lookup_table[self.channels[3]] = chroma.Color('#ffff00')  # D#
+            # self.lookup_table[self.channels[4]] = chroma.Color('#00ff00')  # E
+            # self.lookup_table[self.channels[5]] = chroma.Color('#ff00ff')  # F
+            # self.lookup_table[self.channels[6]] = chroma.Color('#00ffff')  # F#
+            # self.lookup_table[self.channels[7]] = chroma.Color('#ffff00')  # G
+            # self.lookup_table[self.channels[8]] = chroma.Color('#0000ff')  # G#
+            # self.lookup_table[self.channels[9]] = chroma.Color('#00ff00')  # A
+        elif mode == 21: # mode for keyboard
+            self.channels = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] # in order of basines
+            for i in range(0, len(self.channels)):
+                hue = i*int(6/(len(self.channels))) + 60
+                self.lookup_table[self.channels[i]] = chroma.Color((hue, 1, 1), 'HSV')
+            # self.lookup_table[self.channels[1]] = chroma.Color('#ff0000')  # C#
+            # self.lookup_table[self.channels[2]] = chroma.Color('#00ffff')  # D
+            # self.lookup_table[self.channels[3]] = chroma.Color('#ffff00')  # D#
+            # self.lookup_table[self.channels[4]] = chroma.Color('#00ff00')  # E
+            # self.lookup_table[self.channels[5]] = chroma.Color('#ff00ff')  # F
+            # self.lookup_table[self.channels[6]] = chroma.Color('#00ffff')  # F#
+            # self.lookup_table[self.channels[7]] = chroma.Color('#ffff00')  # G
+            # self.lookup_table[self.channels[8]] = chroma.Color('#0000ff')  # G#
+            # self.lookup_table[self.channels[9]] = chroma.Color('#00ff00')  # A
         self.color_counts = {}
         # for j in range(0, self.no_of_colors):
         #for j, i in enumerate(self.lookup_table):
